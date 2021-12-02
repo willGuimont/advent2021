@@ -40,11 +40,6 @@ instance Applicative EvalPlan where pure = return; (<*>) = ap
 instance Monad EvalPlan where return = EvalReturn; (>>=) = EvalBind
 
 -- Parsing
-instructionName :: Instruction -> String
-instructionName (Forward _) = "forward"
-instructionName (Down _) = "down"
-instructionName (Up _) = "up"
-
 parseForward :: Parser Instruction
 parseForward = Forward . read <$> (string "forward" *> many1 space *> many1 digit <* many newline)
 

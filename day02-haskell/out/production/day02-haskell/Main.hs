@@ -40,11 +40,6 @@ instance Applicative EvalPlan where pure = return; (<*>) = ap
 instance Monad EvalPlan where return = EvalReturn; (>>=) = EvalBind
 
 -- Parsing
-instructionName :: Instruction -> String
-instructionName (Forward _) = "forward"
-instructionName (Down _) = "down"
-instructionName (Up _) = "up"
-
 parseForward :: Parser Instruction
 parseForward = Forward . read <$> (string "forward" *> many1 space *> many1 digit <* many newline)
 
@@ -101,6 +96,7 @@ evalPlan :: (Instruction -> EvalPlan ()) -> PlanState -> Plan -> (PlanState, Pla
 evalPlan _ s [] = exec s EvalGet
 evalPlan eval s (x : xs) = let (s', _) = exec s (eval x) in evalPlan eval s' xs
 
+-- Main
 main :: IO ()
 main = do
   input <- readFile "input.txt"
